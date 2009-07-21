@@ -1,0 +1,62 @@
+A simple notation and stat-tracking system for tennis.
+
+This script reads a point-by-point input file from a set or match and outputs the following:
+
+* the winner
+* points won be each player
+* winners
+* unforced errors
+* double faults
+* aces
+* first serve percentage
+* percentage of points won after good first serve
+
+More stats to come. The input file syntax is best explained with an example:
+
+  DATE: 2009-07-08
+
+  PLAYER: R, Roddick
+  PLAYER: G, Gasquet
+
+  SET: 1
+
+  GAME: R
+  1R
+  1R
+  0R
+  2G
+  0G
+  0GU
+  2G
+  1GU
+
+  GAME: G
+  0RW
+  0RU
+  0G
+  0GW
+  0G
+  0GU
+
+  ...
+  
+The first line gives the date of the match. The next two lines name the players (each of which is a different one-letter abbreviation followed by a comma and the full name). The next line indicates the beginning of a new set (the number is optional). The next line indicates the start of a new game and the player who is serving (use the player's abbreviation).
+
+The un-labeled lines with two or three characters are the points. The first character is the number 0, 1, or 2 which indicates the number of service faults. The second character is the abbreviation of the player who won the point, and the third character is an optional description of how the point was won:
+
+  A : ace
+  U : unforced error
+  W : winner
+
+The default is a "forced error" which is how most points are decided.
+
+
+== To-do List
+
+* report output should use column headers (don't repeat player names)
+* support for multiple matches/files
+* syntax checking (error messages)
+* score checking (do game final scores make sense?)
+* more stats
+* command-line real-time entry mode (generates data file)
+
