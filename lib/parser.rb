@@ -3,7 +3,6 @@ require 'date'
 module TennisStats
 
   class Parser
-    attr_reader :players, :matches
 
     ##
     # Initialize a new Parser object. Takes a filename or an array of lines.
@@ -42,7 +41,7 @@ module TennisStats
     end
     
     
-    protected # -----------------------------------------------------------------
+    protected # ---------------------------------------------------------------
     
     ##
     # Parse the data file: transform into an array of Match objects.
@@ -54,8 +53,8 @@ module TennisStats
 
         # parse DATE
         if m = line.match(/^DATE: ?(.*)/)
-          @matches << @current_match if @current_match # finished processing; save match
-          @current_match = parse_date(m[1])
+          save_current_match
+          parse_date(m[1])
 
         # parse PLAYER
         elsif m = line.match(/^PLAYER: ?(.*)/)
@@ -63,24 +62,27 @@ module TennisStats
 
         # parse SET
         elsif m = line.match(/^SET/)
-          @current_set = Set.new
-          @current_match.add_set @current_set
+          parse_set
         
         # parse GAME
         elsif m = line.match(/^GAME: ?(.*)/)
-          @current_game = Game.new(@current_match.player(m[1]))
-          @current_set.add_game @current_game
+          parse_game(m[1])
         
         # parse POINT
-        elsif m = line.match(/^(\d)(\w)(\w?)/)
-          p = @current_match.player(m[2])
-          @current_point = Point.new(p, m[1], m[3])
-          @current_game.add_point @current_point
+        elsif m = line.match(/^\d\w\w?/)
+          parse_point(m[0])
         end
       end
-      @matches << @current_match if @current_match # save last match
-
+      save_current_match
       return @matches
+    end
+    
+    ##
+    # Add the current match to the @matches array. Do this whenever we finish
+    # parsing a match.
+    #
+    def save_current_match
+      @matches << @current_match if @current_match
     end
     
     ##
@@ -88,14 +90,14 @@ module TennisStats
     #
     def parse_date(text)
       begin
-        Match.new Date.parse(text.strip)
+        @current_match = Match.new( Date.parse(text.strip) )
       rescue ArgumentError
         parse_error "Invalid date format: please use YYYY-MM-DD."
       end
     end
     
     ##
-    # Parse a PLAYER line. Returns a Player object.
+    # Parse a PLAYER line. Adds a Player to the current Match.
     #
     def parse_player(text)
       a, n = text.split(/,\w*/, 2)
@@ -107,6 +109,45 @@ module TennisStats
       end
       p = Player.new(n.strip)
       @current_match.add_player(a.strip, p)
+    end
+    
+    ##
+    # Parse a SET line. Adds a new Set to the current Match.
+    #
+    def parse_set
+      @current_set = Set.new
+      @current_match.add_set @current_set
+    end
+    
+    ##
+    # Parse a GAME line. Adds a new game to the current Set.
+    #
+    def parse_game(text)
+      p = @current_match.player(text)
+      if p.nil?
+        parse_error "Player not found (abbreviation: #{text.strip})."
+      end
+      @current_game = Game.new(p)
+      @current_set.add_game @current_game
+    end
+    
+    ##
+    # Parse a point. Adds a new Point to the current Game.
+    #
+    def parse_point(text)
+      m = text.match(/^(\d)(\w)(\w?)/)
+      unless [0, 1, 2].include?(m[1].to_i)
+        parse_error "Invalid number of faults: must be 0, 1, or 2."
+      end
+      p = @current_match.player(m[2])
+      if p.nil?
+        parse_error "Player not found (abbreviation: #{text.strip})."
+      end
+      unless ["", "A", "U", "W"].include?(m[3])
+        parse_error "Invalid point description: must be blank, A, U, or W."
+      end
+      @current_point = Point.new(p, m[1], m[3])
+      @current_game.add_point @current_point
     end
     
     ##
