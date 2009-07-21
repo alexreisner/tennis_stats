@@ -58,6 +58,13 @@ This is a stand-alone script with no formal installation procedure. Just clone t
   ruby report.rb [datafile]
 
 
+== Testing
+
+The unit tests use Ruby's included Test::Unit and should be run like so:
+
+  rake test
+
+
 == To-do List
 
 * handle tiebreakers properly
