@@ -1,7 +1,8 @@
 ##
-# tennis_stats.rb
-# 
+# Tennis Stats
 # Extremely simple stat tracking for tennis.
+#
+# Copyright (c) 2009 Alex Reisner. (MIT license)
 #
 require 'lib/player'
 require 'lib/point'
@@ -15,7 +16,7 @@ puts ""
 
 # make sure data file specified
 if filename.nil?
-  puts "Usage: ruby tennis_stats.rb [data file]"
+  puts "Usage: ruby tennis_stats.rb [datafile]"
   puts ""
   exit
 end

@@ -1,9 +1,9 @@
+= tennis_stats
+
 A simple notation and stat-tracking system for tennis.
 
-This script reads a point-by-point input file from a set or match and outputs the following:
+This script reads a point-by-point input file from a set or match and outputs the following for each player:
 
-* the winner
-* points won be each player
 * winners
 * unforced errors
 * double faults
@@ -49,6 +49,13 @@ The un-labeled lines with two or three characters are the points. The first char
   W : winner
 
 The default is a "forced error" which is how most points are decided.
+
+
+== Installation
+
+This is a stand-alone script with no formal installation procedure. Just clone the repository and run:
+
+  ruby tennis_stats.rb [datafile]
 
 
 == To-do List
