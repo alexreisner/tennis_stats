@@ -10,10 +10,12 @@ require 'lib/game'
 require 'lib/set'
 require 'lib/match'
 require 'lib/parser'
+#require 'rubygems'; require 'ruby-debug'; debugger
+
+puts ""
 
 # gather command-line argument
 filename = ARGV[0]
-puts ""
 
 # make sure data file specified
 if filename.nil?
@@ -22,15 +24,8 @@ if filename.nil?
   exit
 end
 
-# make sure file exists
-unless File.exist?(filename)
-  puts "Data file '#{filename}' not found"
-  puts ""
-  exit
-end
-
 # parse and report
-matches = Parser.new(filename).matches
+matches = TennisStats::Parser.new(filename).matches
 matches.each{ |m| m.report }
 
 

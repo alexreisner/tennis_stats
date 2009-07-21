@@ -1,13 +1,13 @@
-class Player
-  attr_reader :name, :handle
-  
-  def initialize(handle, name = nil)
-    @handle = handle
-    @name = name
-  end
-  
-  def to_s
-    name
+module TennisStats
+  class Player
+    attr_reader :name
+    
+    def initialize(name = nil)
+      @name = name
+    end
+    
+    def to_s
+      name
+    end
   end
 end
-
