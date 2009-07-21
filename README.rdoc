@@ -1,4 +1,4 @@
-= tennis_stats
+= Tennis Stats
 
 A simple notation and stat-tracking system for tennis.
 

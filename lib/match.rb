@@ -2,13 +2,17 @@ class Match
   attr_reader :sets, :date, :players
   
   def initialize(date = nil)
-    @date = date
-    @sets = []
+    @date    = date
+    @sets    = []
     @players = []
   end
 
   def winner
     @sets.group_by{ |i| i.winner }.to_a.sort_by{ |i| i[1].size }.last[0]
+  end
+  
+  def loser
+    @players.detect{ |p| p != winner }
   end
   
   def add_player(player)
@@ -61,14 +65,25 @@ class Match
   end
   
   def report
-    puts "WINNER: #{winner.name} (#{final_score})"
-    %w[points_won winners unforced_errors double_faults aces first_serve_percentage first_serve_points_won].each do |stat|
+    puts "Match on #{@date}: #{winner.name} def #{loser.name} (#{final_score})"
+    puts ""
+    %w[
+      points_won
+      winners
+      unforced_errors
+      double_faults
+      aces
+      first_serve_percentage
+      first_serve_points_won
+      
+    ].each do |stat|
       print stat.upcase.gsub('_', ' ').ljust(28)
       print players.map{ |player|
         "#{player.name} #{send("#{stat}_by", player).to_s.rjust(3)}"
       }.join('        ')
       puts ""
     end
+    puts ""
   end
 end
 
