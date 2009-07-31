@@ -38,17 +38,14 @@ class ParserTest < Test::Unit::TestCase
   end
   
   
-  protected # -----------------------------------------------------------------
+  private # -----------------------------------------------------------------
   
   ##
   # Assert that a given line is parsed without incident.
   #
   def assert_parse_ok(type, line)
-    parser = parser_with_mocks(type)
-    begin
-      assert parser.send("parse_#{type}", line)
-    rescue TennisStats::ParseError
-      assert false, "Line was not parsed successfully"
+    assert_nothing_raised do
+      assert parser_with_mocks(type).send("parse_#{type}", line)
     end
   end
   
@@ -56,12 +53,8 @@ class ParserTest < Test::Unit::TestCase
   # Assert that a given line causes a ParseError.
   #
   def assert_parse_error(type, line)
-    parser = parser_with_mocks(type)
-    begin
-      parser.send("parse_#{type}", line)
-      assert false, "Should have raised ParseError"
-    rescue TennisStats::ParseError
-      assert true
+    assert_raises TennisStats::ParseError do
+      parser_with_mocks(type).send("parse_#{type}", line)
     end
   end
 
