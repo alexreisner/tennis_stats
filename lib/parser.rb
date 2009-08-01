@@ -19,7 +19,7 @@ module TennisStats
 
         # if file doesn't exist...
         if filename_or_text.is_a?(String) and !File.exist?(filename_or_text)
-          raise ParseError, "Data file '#{filename}' not found"
+          raise ParseError, "Data file '#{filename_or_text}' not found"
 
         # file exists...
         else

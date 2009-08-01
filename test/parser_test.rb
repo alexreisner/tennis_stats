@@ -37,8 +37,20 @@ class ParserTest < Test::Unit::TestCase
     assert_parse_error :point, "3B"  # too many faults
   end
   
+  def test_parse_from_file
+    assert_raises TennisStats::ParseError do
+      TennisStats::Parser.new("#{fixtures_path}/does_not_exist")
+    end
+    p = TennisStats::Parser.new("#{fixtures_path}/will_vs_alex")
+    assert_equal 1, p.matches.size
+  end
+  
   
   private # -----------------------------------------------------------------
+  
+  def fixtures_path
+    File.join(File.dirname(__FILE__), "fixtures")
+  end
   
   ##
   # Assert that a given line is parsed without incident.
