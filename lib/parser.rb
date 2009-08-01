@@ -18,7 +18,7 @@ module TennisStats
       else
 
         # if file doesn't exist...
-        if filename_or_text.is_a?(String) and not File.exist?(filename_or_text)
+        if filename_or_text.is_a?(String) and !File.exist?(filename_or_text)
           raise ParseError, "Data file '#{filename}' not found"
 
         # file exists...
@@ -34,14 +34,15 @@ module TennisStats
     end
     
     ##
-    # Get a data structure representing all matches contained in the data file.
+    # Get a data structure representing all matches
+    # contained in the data file.
     #
     def matches
       parse
     end
     
     
-    protected # ---------------------------------------------------------------
+    private # ---------------------------------------------------------------
     
     ##
     # Parse the data file: transform into an array of Match objects.
@@ -50,29 +51,26 @@ module TennisStats
       @line_count = 0
       @text.each do |line|
         @line_count += 1
-
-        # parse DATE
-        if m = line.match(/^DATE: ?(.*)/)
-          save_current_match
-          parse_date(m[1])
-
-        # parse PLAYER
-        elsif m = line.match(/^PLAYER: ?(.*)/)
-          parse_player(m[1])
-
-        # parse SET
-        elsif m = line.match(/^SET/)
-          parse_set
+        case line
         
-        # parse GAME
-        elsif m = line.match(/^GAME: ?(.*)/)
-          parse_game(m[1])
+          when /^DATE: ?(.*)/
+            save_current_match
+            parse_date($1)
+
+          when /^PLAYER: ?(.*)/
+            parse_player($1)
+
+          when /^SET/
+            parse_set
         
-        # parse POINT
-        elsif m = line.match(/^\d\w\w?/)
-          parse_point(m[0])
+          when /^GAME: ?(.*)/
+            parse_game($1)
+        
+          when /^(\d\w\w?)/
+            parse_point($1)
         end
       end
+      
       save_current_match
       return @matches
     end
@@ -160,4 +158,3 @@ module TennisStats
 
   class ParseError < StandardError; end
 end
-
