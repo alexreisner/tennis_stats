@@ -9,7 +9,7 @@ module TennisStats
     end
     
     def winner
-      @points.group_by{ |i| i.winner }.to_a.sort_by{ |i| i[1].size }.last[0]
+      points.group_by{ |i| i.winner }.to_a.sort_by{ |i| i[1].size }.last[0]
     end
     
     def add_point(point)

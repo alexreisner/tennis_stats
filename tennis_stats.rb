@@ -4,6 +4,7 @@
 #
 # Copyright (c) 2009 Alex Reisner. (MIT license)
 #
+require 'lib/enumerable'
 require 'lib/player'
 require 'lib/point'
 require 'lib/game'

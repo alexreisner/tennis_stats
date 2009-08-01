@@ -15,7 +15,7 @@ module TennisStats
     # Get the Player who won.
     #
     def winner
-      @sets.group_by{ |i| i.winner }.to_a.sort_by{ |i| i[1].size }.last[0]
+      sets.group_by{ |i| i.winner }.to_a.sort_by{ |i| i[1].size }.last[0]
     end
     
     ##
